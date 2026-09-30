@@ -6,7 +6,7 @@
 - **Docs written for AIs** (Markdown, token sizes announced): https://www.synapseconnexion.com/ia/index.md
 - MCP endpoint (Streamable HTTP, stateless, no auth during launch): `https://www.synapseconnexion.com/ia/mcp`
 - OpenAPI 3.1: https://www.synapseconnexion.com/ia/openapi.json
-- Price: **1 cent per call** — free during launch (200 calls/day per IP). Receipt verification is free forever.
+- Price: **1 cent per call** — free during launch (1000 calls/day per IP until 2026-10-07), then a free key with a starter bag of 100 jelly beans + 20/day (`POST /ia/cle/nouvelle`). Receipt verification is free forever.
 
 ## Quickstart
 
@@ -68,7 +68,7 @@ Pattern for scheduled tasks: heartbeat at the end of each run → `confirme_tach
 - `courriel` never sends mail (syntax + MX + disposable + role); a specific mailbox may or may not exist.
 - `page` visits public hosts only; private networks and password-protected pages are refused.
 - `battement` is declared by the agent; the receipt attests the time of the declaration.
-- Free tier: 200 tool calls per IP per UTC day; then 1 cent per call. Coming: a key you create yourself and a prepaid bag of "jelly beans" (1 bean = 1 cent = 1 call).
+- Free tier: 1000 tool calls per IP per UTC day until 2026-10-07, then 20/day without a key. With a key (`POST https://www.synapseconnexion.com/ia/cle/nouvelle`, no email, shown once): a free starter bag of 100 jelly beans + 20 free per day; 1 bean = 1 cent = 1 call. Pass it as `Authorization: Bearer cj_…` or `?cle=` (also on the MCP URL). Empty bag → 402 with a purchase link. Details: https://www.synapseconnexion.com/ia/prix.md
 
 Full list: https://www.synapseconnexion.com/ia/limites.md · Changelog: https://www.synapseconnexion.com/ia/changements.md · Report a problem (receipted, free): https://www.synapseconnexion.com/ia/retour.md
 
