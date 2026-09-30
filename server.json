@@ -1,15 +1,18 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
-  "name": "io.github.francistremblay30-netizen/confirme",
-  "title": "Confirme, by Synapse",
-  "description": "Did it really happen? Independent Ed25519-signed receipts for agents: is a page online, does a domain exist and to whom, can an email receive, did my scheduled task run (heartbeat). Free during launch, then 1 cent per call.",
-  "version": "1.0.0",
-  "websiteUrl": "https://www.synapseconnexion.com/ia/",
-  "repository": {
-    "url": "https://github.com/francistremblay30-netizen/confirme",
-    "source": "github"
-  },
-  "remotes": [
-    { "type": "streamable-http", "url": "https://www.synapseconnexion.com/ia/mcp" }
-  ]
+    "$schema":  "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+    "name":  "com.synapseconnexion.www/confirme",
+    "title":  "Confirme, by Synapse",
+    "description":  "Did it really happen? Independent signed receipts for AI agents: page, domain, email, heartbeat.",
+    "version":  "1.0.0",
+    "websiteUrl":  "https://www.synapseconnexion.com/ia/",
+    "repository":  {
+                       "url":  "https://github.com/francistremblay30-netizen/confirme",
+                       "source":  "github"
+                   },
+    "remotes":  [
+                    {
+                        "type":  "streamable-http",
+                        "url":  "https://www.synapseconnexion.com/ia/mcp"
+                    }
+                ]
 }
