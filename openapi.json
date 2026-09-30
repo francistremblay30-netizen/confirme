@@ -1,0 +1,43 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Confirme, by Synapse",
+    "version": "1.0.0",
+    "summary": "Did it really happen? Independent, signed receipts for AI agents.",
+    "description": "Micro-services an AI agent calls itself. Each response carries an Ed25519-signed receipt from Synapse (an independent third party) attesting what was observed and when. Free during launch: 200 calls/day per IP, then 1 cent per call. MCP endpoint: https://www.synapseconnexion.com/ia/mcp",
+    "contact": { "url": "https://www.synapseconnexion.com/ia/" }
+  },
+  "servers": [{ "url": "https://www.synapseconnexion.com/ia" }],
+  "paths": {
+    "/confirme/page": {
+      "get": { "operationId": "confirmePage", "summary": "Is this page online right now?", "parameters": [{ "name": "url", "in": "query", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Status, final URL, redirects, timing, title, TLS, content hash, signed receipt", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reponse" } } } }, "400": { "description": "Invalid or non-public URL" }, "429": { "description": "Free daily quota reached" } } },
+      "post": { "operationId": "confirmePagePost", "summary": "Same, JSON body {url}", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "url": { "type": "string" } }, "required": ["url"] } } } }, "responses": { "200": { "description": "OK" } } }
+    },
+    "/confirme/domaine": {
+      "get": { "operationId": "confirmeDomaine", "summary": "Does this domain exist, to whom, until when, which DNS?", "parameters": [{ "name": "domaine", "in": "query", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "DNS (A, AAAA, MX, NS, SPF, DMARC), registration (RDAP), signed receipt", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reponse" } } } } } }
+    },
+    "/confirme/courriel": {
+      "get": { "operationId": "confirmeCourriel", "summary": "Can this email address receive mail? (no message sent)", "parameters": [{ "name": "courriel", "in": "query", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Syntax, MX, disposable, role address, verdict, signed receipt", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reponse" } } } } } }
+    },
+    "/confirme/battement": {
+      "post": { "operationId": "confirmeBattement", "summary": "Heartbeat: my task just ran (call at the end of each successful run)", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "cle": { "type": "string", "description": "Secret task key, 8-80 chars" }, "note": { "type": "string" } }, "required": ["cle"] } } } },
+        "responses": { "200": { "description": "Recorded, signed receipt", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reponse" } } } } } },
+      "get": { "operationId": "confirmeBattementGet", "summary": "Same, query parameters", "parameters": [{ "name": "cle", "in": "query", "required": true, "schema": { "type": "string" } }, { "name": "note", "in": "query", "schema": { "type": "string" } }], "responses": { "200": { "description": "OK" } } }
+    },
+    "/confirme/tache": {
+      "get": { "operationId": "confirmeTache", "summary": "Did my task really run in the last N seconds?", "parameters": [{ "name": "cle", "in": "query", "required": true, "schema": { "type": "string" } }, { "name": "depuis", "in": "query", "schema": { "type": "integer", "default": 86400 } }],
+        "responses": { "200": { "description": "Last heartbeat, count in window, verdict, signed receipt", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reponse" } } } } } }
+    },
+    "/cle": { "get": { "operationId": "clePublique", "summary": "Public key used to sign receipts", "responses": { "200": { "description": "Ed25519 public key, base64" } } } },
+    "/verifier": { "post": { "operationId": "verifierRecu", "summary": "Verify a receipt (always free)", "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Recu" } } } }, "responses": { "200": { "description": "{valide: true|false}" } } } }
+  },
+  "components": {
+    "schemas": {
+      "Recu": { "type": "object", "properties": { "id": { "type": "string" }, "horodatage": { "type": "string", "format": "date-time" }, "service": { "type": "string" }, "demande_sha256": { "type": "string" }, "resultat_sha256": { "type": "string" }, "signature_base64": { "type": "string" }, "cle_id": { "type": "string" }, "verifier": { "type": "string" } }, "required": ["id", "horodatage", "service", "demande_sha256", "resultat_sha256", "signature_base64"] },
+      "Reponse": { "type": "object", "properties": { "ok": { "type": "boolean" }, "service": { "type": "string" }, "demande": { "type": "object" }, "resultat": { "type": "object" }, "recu": { "$ref": "#/components/schemas/Recu" }, "duree_ms": { "type": "integer" }, "prix": { "type": "object" }, "quota": { "type": "object" }, "_note": { "type": "string" } } }
+    }
+  }
+}
